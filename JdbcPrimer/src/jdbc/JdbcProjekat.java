@@ -6,6 +6,7 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 import kontroler.MetodeJdbc;
+import model.Kurs;
 
 public class JdbcProjekat {
 
@@ -13,7 +14,7 @@ public class JdbcProjekat {
 		
 	
 		MetodeJdbc metode = new MetodeJdbc();
-		Scanner scenner = new Scanner(System.in);
+		/*Scanner scenner = new Scanner(System.in);
 		
 		System.out.println("Unesite ime kursa");
 		String imeKursa = scenner.nextLine();
@@ -22,9 +23,16 @@ public class JdbcProjekat {
 		
 		int Cena = Integer.parseInt(scenner.nextLine());
 		
+		metode.izmeniCenuKursa(imeKursa, Cena);*/
+		
+		metode.prikaziSveKurseve();
+		
+		Kurs k = metode.vratiKursPoID(3);
+		System.out.println("ID: " + k.getIdKursa());
+		System.out.println("Ime: " + k.getImeKursa());
+		System.out.println("Cena " + k.getCena());
 		
 		
-		metode.izmeniCenuKursa(imeKursa, Cena);
 		
 		
 		

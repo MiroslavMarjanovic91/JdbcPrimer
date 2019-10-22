@@ -1,10 +1,16 @@
 package kontroler;
 
+import java.net.SocketTimeoutException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import com.mysql.cj.protocol.Resultset;
+
+import model.Kurs;
 
 public class MetodeJdbc {
 	
@@ -91,7 +97,7 @@ public class MetodeJdbc {
 	
 	
 	public boolean izmeniCenuKursa(String imeKursa, int Cena) {
-		
+		// ojekeat Connection i i tip podatka konekcija
 		Connection konekcija = null;
 		PreparedStatement pst = null;
 		
@@ -101,6 +107,7 @@ public class MetodeJdbc {
 			
 			String query = "Update courses set cena = ? where ime_kursa = ?";
 			pst = konekcija.prepareStatement(query);
+			//ovo 1 i 2 se odnosi na znak ? koliko ima znak pitanja u upitu, toliko ima brojeva
 			pst.setInt(1, Cena);
 			pst.setString(2, imeKursa);
 			pst.executeUpdate();
@@ -126,15 +133,140 @@ public class MetodeJdbc {
 				e.printStackTrace();
 			}
 		}
-		
-		
-		
-		
-		
-		
-		
-		
 	}
+		
+		
+		public void prikaziSveKurseve() {
+			
+			
+			Connection konekcija = null;
+			PreparedStatement pst = null;
+			ResultSet res = null;
+			
+			try {
+				konekcija = UspostaviKonekciju("kursevi");
+				System.out.println("Konekcija uspostavljena");
+				String query = "Select * from courses";
+				pst = konekcija.prepareStatement(query);
+				
+				res = pst.executeQuery();
+				System.out.println("id	ime	cena");
+				System.out.println("__________________");
+				
+				//ovde čita prvu kolonu, umesto stringova id, ime, cena
+				while(res.next()) {
+					
+					
+					int id = res.getInt("id_courses");
+					String ime = res.getString("ime_kursa");
+					double cena = res.getDouble("cena");
+					System.out.println(id + " " + ime + " " + cena);
+					
+					
+					
+					
+					
+				}
+			
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+			
+			
+			finally {
+				try {
+					pst.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				try {
+					konekcija.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		
+		
+		//importujemo iz drugog paketa - klase Kurs;
+	public Kurs vratiKursPoID(int id) {
+			
+			
+			Connection konekcija = null;
+			PreparedStatement pst = null;
+			ResultSet res = null;
+			
+			//ovo je instaca, objekat je posle kada ga koristimo. malo kurs je referenca
+			Kurs kurs = new Kurs();
+			
+			try {
+				konekcija = UspostaviKonekciju("kursevi");
+				System.out.println("Konekcija uspostavljena");
+				String query = "Select * from courses where id_courses = ? ";
+				pst = konekcija.prepareStatement(query);
+				pst.setInt(1, id);
+				
+				res = pst.executeQuery();
+				
+				//System.out.println("id	ime	cena");
+				//System.out.println("__________________");
+				
+				//ovde čita prvu kolonu, umesto stringova id, ime, cena
+				while(res.next()) {
+					
+					
+					int idKursa = res.getInt("id_courses");
+					kurs.setIdKursa(idKursa);
+					//ili kurs.setIdKursa(res.getInt("id_courses"));
+					
+					kurs.setImeKursa(res.getString("ime_kursa"));
+					kurs.setCena(res.getInt("cena"));
+					
+					
+					
+					
+					
+				}
+				return kurs;
+				
+			
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			} 
+			
+			
+			finally {
+				try {
+					pst.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				try {
+					konekcija.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+		}
+
+
+
+
+	
+			
+			
+
+	
 	
 
 }
+
