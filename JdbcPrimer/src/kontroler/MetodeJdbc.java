@@ -11,6 +11,7 @@ import java.sql.Statement;
 import com.mysql.cj.protocol.Resultset;
 
 import model.Kurs;
+import model.User;
 
 public class MetodeJdbc {
 	
@@ -257,6 +258,103 @@ public class MetodeJdbc {
 			}
 			
 		}
+	
+	
+	
+	
+	public User vratiUseraPoID(int id) {
+		
+		Connection konekcija = null;
+		PreparedStatement pst = null;
+		ResultSet res = null;
+		
+		User userKorisnik = new User();
+		
+		
+		try {
+			konekcija = UspostaviKonekciju("kursevi");
+			System.out.println("Konekcija uspostavljena...");
+			
+			String query = "Select * from users where id_users = ?";
+			pst = konekcija.prepareStatement(query);
+			pst.setInt(1, id);
+			//poput neke liste
+			res = pst.executeQuery();
+			
+			
+			while(res.next()) {
+				//ovde radimo rucno mapiranje 
+				userKorisnik.setIdUser(res.getInt("id_users"));
+				userKorisnik.setUserName(res.getString("username"));
+				userKorisnik.setPassword(res.getString("password"));
+				userKorisnik.setMadBroj(res.getInt("mat_br"));
+			
+			}
+			return userKorisnik; 
+			
+			
+			
+			
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+			return null;
+			
+			
+		} finally {
+			
+			
+			
+			try {
+				res.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			try {
+				pst.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			try {
+				konekcija.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			
+			
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
 
 
 

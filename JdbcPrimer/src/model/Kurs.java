@@ -6,6 +6,8 @@ public class Kurs {
 	private int idKursa;
 	private String imeKursa;
 	private int cena;
+	
+	
 	public int getIdKursa() {
 		return idKursa;
 	}
