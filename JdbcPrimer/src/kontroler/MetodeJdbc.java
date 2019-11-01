@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mysql.cj.protocol.Resultset;
 
@@ -325,46 +327,196 @@ public class MetodeJdbc {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
-			
-			
-			
+
 		}
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+	}
+	
+	public int vratiIdPoUserneme(String userName) {
+
+		Connection konekcija = null;
+		PreparedStatement pst = null;
+		ResultSet res = null;
+
+		int id = 0;
+
+		try {
+			konekcija = UspostaviKonekciju("Kursevi");
+			String query = "SELECT id_users FROM users WHERE username = ?";
+			pst = konekcija.prepareStatement(query);
+				pst.setString(1, userName );
+			res = pst.executeQuery();
+
+			while(res.next()) {
+
+				id = res.getInt("id_users");
+			}
+
+			return id;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return 0;
+		} finally {
+			try {
+				res.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+				pst.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+				konekcija.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+		}	
 	}
 
 
 
 
-	
-			
-			
 
-	
-	
+	public List<String> vratiBrojTelefona(int idUser) {
 
+		Connection konekcija = null;
+		PreparedStatement pst = null;
+		ResultSet res = null;
+
+		List<String> listaBrojevaTelefona = new ArrayList<String>();
+
+		try {
+			konekcija = UspostaviKonekciju("Kursevi");
+			String query = "SELECT broj_telefona FROM brojevi_telefona WHERE user = ?";
+			pst = konekcija.prepareStatement(query);
+				pst.setInt(1, idUser);
+			res = pst.executeQuery();
+
+			while(res.next()) {
+
+				listaBrojevaTelefona.add(res.getString("broj_telefona"));
+
+			}
+			return listaBrojevaTelefona;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}finally {
+			try {
+				res.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+				pst.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+				konekcija.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+		}		
+	}
+
+
+	public List<Integer> vratiIdKursaPoIdUsera(int idUser) {
+
+		Connection konekcija = null;
+		PreparedStatement pst = null;
+		ResultSet res = null;
+
+		List<Integer> listaIdKurseva = new ArrayList<Integer>();
+
+		try {
+			konekcija = UspostaviKonekciju("Kursevi");
+			String query = "SELECT id_c FROM users_courses WHERE id_u = ?";
+			pst = konekcija.prepareStatement(query);
+				pst.setInt(1, idUser);
+			res = pst.executeQuery();
+
+			while(res.next()) {
+
+				listaIdKurseva.add(res.getInt("id_c"));
+
+			}
+			return listaIdKurseva;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}finally {
+			try {
+				res.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+				pst.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			try {
+				konekcija.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+		}		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
+
 
